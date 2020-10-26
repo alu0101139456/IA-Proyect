@@ -1,22 +1,23 @@
-#include "celda.h"
+#include "../include/celda.hpp"
 
-Celda::Celda():
-obstaculo(false) { }
+//Constructor por defecto.
+Celda::Celda(void) {}
 
-void Celda::setObstaculo() {
-  obstaculo = true;
+//Constructor.
+Celda::Celda(int i, int j) {
+  i_ = i;
+  j_ = j;
 }
-bool Celda::getObstaculo(){
-  return obstaculo;
+
+//Destructor.
+ Celda::~Celda(void) {}
+
+int Celda::getEstado(void) const {
+  return 0;
 }
-void Celda::setCoordenada(int a, int b) {
-   c.setX(a);
-   c.setY(b);
-}
-Coordenada Celda::getCoordenada() {
-  return c;
-}
-void Celda::print() {
-  if (obstaculo == false) std::cout << " ";
-  else std::cout << "@";
+
+//Sobrecarga del operador de salida.
+std::ostream& Celda::mostrar(std::ostream& os) const {
+  os << "      ";
+  return os;
 }
