@@ -10,13 +10,13 @@ LIBRARIES	:=
 EXECUTABLE	:= main 
 
 
-all: $(BIN)/$(EXECUTABLE) input.txt
+all: $(BIN)/$(EXECUTABLE) 
 
 run: clean all
 	clear
 	./$(BIN)/$(EXECUTABLE) 
 
-$(BIN)/$(EXECUTABLE): $(SRC)/*.cc
+$(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)
 
 clean:
