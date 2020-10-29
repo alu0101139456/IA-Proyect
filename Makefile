@@ -7,7 +7,7 @@ INCLUDE	:= include
 LIB		:= lib
 
 LIBRARIES	:=
-EXECUTABLE	:= fibonacci_word
+EXECUTABLE	:= main 
 
 
 all: $(BIN)/$(EXECUTABLE) input.txt
@@ -20,4 +20,4 @@ $(BIN)/$(EXECUTABLE): $(SRC)/*.cc
 	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ $(LIBRARIES)
 
 clean:
-	-rm $(BIN)/fibonacci_word
+	-rm $(BIN)/*
