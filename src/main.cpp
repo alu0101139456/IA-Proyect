@@ -6,7 +6,30 @@ int main(void) {
   std::cout << "¿Desea introducir las características del entorno mediante fichero(0) o de forma manual(1)? ";
   std::cin >> modo;
   if (modo == 0) {
-    //Aquí va el código para el fichero.
+    std::cout << "Introduzca el nombre del fichero de entrada:  ";
+    std::cin >> fichero;
+    std::cout << std::endl;
+    std::ifstream infile(fichero);
+    int filas, columnas, nObst, c1, c2;
+    int n = 0;
+
+    infile >> filas;
+    infile >> columnas;
+    Tablero tablero(filas, columnas);
+
+    infile >> nObst;
+    while (n < nObst) {
+      if (infile.eof()) {
+        std::cout << "El fichero no ha podido ser leído" << std::endl;
+        break;
+      }
+      infile >> c1;
+      infile >> c2;
+      tablero.set_obstaculo(c1, c2);
+      n++;
+    }
+    infile.close();
+    std::cout << tablero;
  
   } else {
     int filas, columnas;
