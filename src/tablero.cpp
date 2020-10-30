@@ -1,8 +1,8 @@
-#include "../include/tablero.hpp"
-#include "../include/celda1.hpp"
-#include "../include/celda2.hpp"
-#include "../include/celda3.hpp"
-#include "../include/celda4.hpp"
+#include "tablero.hpp"
+#include "celda1.hpp"
+#include "celda2.hpp"
+#include "celda3.hpp"
+#include "celda4.hpp"
 
 //Constructor por defecto.
 Tablero::Tablero(void) {

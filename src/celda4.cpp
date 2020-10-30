@@ -1,4 +1,4 @@
-#include "../include/celda4.hpp"
+#include "celda4.hpp"
 
 //Constructor por defecto.
 Celda4::Celda4(void) {}

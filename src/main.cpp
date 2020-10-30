@@ -1,11 +1,20 @@
 #include <iostream>
-#include "../include/tablero.hpp"
+#include "tablero.hpp"
+#include <fstream>
+
+
+
 
 int main(void) {
   int modo;
   std::cout << "¿Desea introducir las características del entorno mediante fichero(0) o de forma manual(1)? ";
   std::cin >> modo;
+
   if (modo == 0) {
+    std::string fichero;
+    system("clear");
+    std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
+    system("ls *.txt");
     std::cout << "Introduzca el nombre del fichero de entrada:  ";
     std::cin >> fichero;
     std::cout << std::endl;
@@ -32,6 +41,7 @@ int main(void) {
     std::cout << tablero;
  
   } else {
+    system("clear");
     int filas, columnas;
     std::cout << "Introduzca las dimensiones del entorno:" << std::endl;
     std::cout << "Filas: ";
