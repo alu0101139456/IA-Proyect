@@ -1,8 +1,4 @@
-#include "tablero.hpp"
-#include "celda1.hpp"
-#include "celda2.hpp"
-#include "celda3.hpp"
-#include "celda4.hpp"
+#include "../include/tablero.hpp"
 
 //Constructor por defecto.
 Tablero::Tablero(void) {
@@ -13,15 +9,20 @@ Tablero::Tablero(void) {
 Tablero::Tablero(int filas, int columnas) {
   filas_ = filas;
   columnas_ = columnas;
+  celdas_size_ = 45;
   malla_ = new Celda*[(filas_ + 2) * (columnas_ + 2)];
   for (int i = 0; i < (filas_ + 2); i++) {
     for (int j = 0; j < (columnas_ + 2); j++) {
       if ((i == 0) || (i == filas + 1) || (j == 0) || (j == columnas_ + 1))
-        malla_[position(i, j)] = new Celda3(i, j);					//Para crear el borde mediante obstáculos.
+        malla_[position(i, j)] = new Celda(i, j, 3);					//Para crear el borde mediante obstáculos.
       else
-        malla_[position(i, j)] = new Celda(i, j);
+        malla_[position(i, j)] = new Celda(i, j, 0);
     }
   }
+  i_inicial = -1;
+  j_inicial = -1;
+  i_final = -1;
+  j_final = -1;
 }
 
 //Destructor.
@@ -32,18 +33,43 @@ Tablero::~Tablero(void) {
 }
 
 void Tablero::set_inicial(int i, int j) {
-  delete malla_[position(i, j)];
-  malla_[position(i, j)] = new Celda1(i, j);
+  position_cursor(i, j);
+  malla_[position(i, j)] -> setEstado(1);
+  if (i_inicial != -1) {
+    malla_[position(i_inicial, j_inicial)] -> setEstado(0);
+  } 
+  if ((i_inicial == i) && (j_inicial == j)) {
+    i_inicial = -1;
+    j_inicial = -1;
+  } else {
+      i_inicial = i;
+      j_inicial = j;
+  }
 }
 
 void Tablero::set_final(int i, int j) {
-  delete malla_[position(i, j)];
-  malla_[position(i, j)] = new Celda2(i, j);
+  position_cursor(i, j);
+  malla_[position(i, j)] -> setEstado(2);
+  if (i_final != -1) {
+    malla_[position(i_final, j_final)] -> setEstado(0);
+  } 
+  if ((i_final == i) && (j_final == j)) {
+    i_final = -1;
+    j_final = -1;
+  } else {
+      i_final = i;
+      j_final = j;
+  }
 }
 
+
 void Tablero::set_obstaculo(int i, int j) {
-  delete malla_[position(i, j)];
-  malla_[position(i, j)] = new Celda3(i, j);
+  position_cursor(i, j);
+  if (malla_[position(i, j)] -> getEstado() == 3) {
+    malla_[position(i, j)] -> setEstado(0);
+  } else {
+      malla_[position(i, j)] -> setEstado(3);
+  }
 }
 
 void Tablero::modo_aleatorio(int num_obstaculos) {
@@ -52,47 +78,51 @@ void Tablero::modo_aleatorio(int num_obstaculos) {
     i_pos = rand() % filas_ + 1;
     j_pos = rand() % columnas_ + 1;
     if (malla_[position(i_pos, j_pos)] -> getEstado() == 0) {
-      set_obstaculo(i_pos, j_pos);
+      malla_[position(i_pos, j_pos)] -> setEstado(3);
       contador++;
     }
   }
 }
 
-//Sobrecarga del operador de salida.
-std::ostream& operator<<(std::ostream& os, const Tablero& tablero) {
-  int columna_aux = 0;
-  os << "   ▄";
-  while (columna_aux < tablero.columnas_) {
-    os << "▄▄▄▄▄▄▄▄";
-    columna_aux++;
-  }
-  os << "▄\n";
-  for (int i = 1; i <= tablero.filas_; i++) {
-    os << "   █";
-      for (int j = 1; j <= tablero.columnas_; j++)
-        os << "╔══════╗";
-      os << "█\n" << "   █";
-      for (int k = 1; k <= tablero.columnas_; k++) {
-        os << "║";
-        tablero.malla_[tablero.position(i, k)]->mostrar(std::cout);
-        os << "║";
+void Tablero::redimensionar(sf::RenderWindow& window) {
+  celdas_size_ = window.getSize().x / (columnas_ + 2);
+  if (((filas_ + 2) * celdas_size_) > window.getSize().y)
+    celdas_size_ = window.getSize().y / (filas_ + 2);
+    
+  for (int i = 1; i <= filas_; i++) {
+    for (int j = 1; j <= columnas_; j++) {
+        malla_[position(i, j)]-> setPosition(celdas_size_*j, celdas_size_*i);
+        malla_[position(i, j)] -> setScale(celdas_size_/45, celdas_size_/45);
       }
-      os << "█\n" << "   █";
-      for (int l = 1; l <= tablero.columnas_; l++)
-        os << "╚══════╝";
-    os << "█\n";
-  }
-  os << "   ▀";
-  columna_aux = 0;
-  while (columna_aux < tablero.columnas_) {
-    os << "▀▀▀▀▀▀▀▀";
-    columna_aux++;
-  }
-  os << "▀\n";
-  return os;
+    }
 }
-     
+
+void Tablero::draw(sf::RenderTarget& target, sf::RenderStates states) const {
+  for (int i = 1; i <= filas_; i++) {
+    for (int j = 1; j <= columnas_; j++) {
+      target.draw(*malla_[position(i, j)]);
+    }
+  }
+}
+
 //Método que calcula la posición del vector en memoria dinámica que es equivalente a la posición (i,j) de la malla.
 int Tablero::position(int i, int j) const {
   return i * (columnas_ + 2) + j;
+}
+
+void Tablero::position_cursor(int &i, int &j) {
+  int i_aux = 0;
+  int j_aux = 0;
+  i = i - celdas_size_;
+  j = j - celdas_size_;
+  while (i > 0) {
+    i = i - celdas_size_;
+    i_aux++;
+  }
+  while (j > 0) {
+    j = j - celdas_size_;
+    j_aux++;
+  }
+  i = j_aux;
+  j = i_aux;
 }

@@ -3,9 +3,10 @@
 #define TABLERO
 
 #include <iostream>
-#include "celda.hpp"
+#include <SFML/Graphics.hpp>
+#include "../include/celda.hpp"
 
-class Tablero {
+class Tablero : public sf::Drawable {
  public:
   Tablero(void);
   Tablero(int filas, int columnas);
@@ -14,12 +15,19 @@ class Tablero {
   void set_final(int i, int j);
   void set_obstaculo(int i, int j);
   void modo_aleatorio(int num_obstaculos);
-  friend std::ostream& operator<<(std::ostream& os, const Tablero& tablero);
+ void redimensionar(sf::RenderWindow& window);
+  virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 
  private:
   int filas_;
   int columnas_;
+  int i_inicial;
+  int j_inicial;
+  int i_final;
+  int j_final;
   Celda** malla_;
+  float celdas_size_;
+  void position_cursor(int &i, int &j);
   int position(int i, int j) const;
 };
 
