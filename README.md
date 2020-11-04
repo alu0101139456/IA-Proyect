@@ -5,6 +5,11 @@
 
 ***
 
+## Dependencias:
+ ~~~
+ ~$ sudo apt-get install libsfml-dev
+ ~~~
+
 ###  OBJETIVO
 
 El objetivo del desarrollo de la actividad práctica es la utilización de estrategias de búsqueda como propuesta de resolución en la determinación de la planificación de trayectorias para coches autónomos.

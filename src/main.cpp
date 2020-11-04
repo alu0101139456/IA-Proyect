@@ -14,7 +14,7 @@ int main(void) {
     std::string fichero;
     system("clear");
     std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
-    system("ls *.txt");
+    system("ls bin/*.txt");
     std::cout << "Introduzca el nombre del fichero de entrada:  ";
     std::cin >> fichero;
     std::cout << std::endl;
@@ -25,7 +25,12 @@ int main(void) {
     infile >> filas;
     infile >> columnas;
     Tablero tablero(filas, columnas);
-
+    infile >> c1;
+    infile >> c2; 
+    tablero.set_inicial(c1, c2);
+    infile >> c1;
+    infile >> c2; 
+    tablero.set_final(c1, c2);
     infile >> nObst;
     while (n < nObst) {
       if (infile.eof()) {
