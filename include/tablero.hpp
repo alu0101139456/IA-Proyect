@@ -4,7 +4,7 @@
 
 #include <iostream>
 #include <SFML/Graphics.hpp>
-#include "../include/celda.hpp"
+#include "celda.hpp"
 
 class Tablero : public sf::Drawable {
  public:
