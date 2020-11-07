@@ -12,6 +12,8 @@ class Celda : public sf::Sprite {
   int getEstado(void) const;
   void setEstado(int estado);
   void cargar_textura(int estado);
+  inline int Get_i() const { return i_; }
+  inline int Get_j() const { return j_; }
 
  private: 
   int i_;
