@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../include/tablero.hpp"
+#include "tablero.hpp"
 #include <fstream>
 #include <SFML/Graphics.hpp>
 

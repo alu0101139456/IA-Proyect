@@ -1,4 +1,4 @@
-#include "../include/tablero.hpp"
+#include "tablero.hpp"
 
 //Constructor por defecto.
 Tablero::Tablero(void) {
@@ -126,3 +126,4 @@ void Tablero::position_cursor(int &i, int &j) {
   i = j_aux;
   j = i_aux;
 }
+
