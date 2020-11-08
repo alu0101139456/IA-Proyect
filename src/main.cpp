@@ -12,10 +12,10 @@ int main(void) {
         }*/
 
   int modo;
-  std::cout << "¿Desea introducir las características del entorno mediante fichero(0) o de forma manual(1)? ";
-  std::cin >> modo;
+  // std::cout << "¿Desea introducir las características del entorno mediante fichero(0) o de forma manual(1)? ";
+  // std::cin >> modo;
 
-  if (modo == 0) {
+  if ( 1) {
     /*std::string fichero;
     system("clear");
     std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
@@ -44,6 +44,17 @@ int main(void) {
     }
     infile.close();
     std::cout << tablero;*/
+    int filas, columnas, modo;
+    // std::cout << "Introduzca las dimensiones del entorno:" << std::endl;
+    // std::cout << "Filas: ";
+    // std::cin >> filas;
+    // std::cout << "Columnas: ";
+    // std::cin >> columnas;
+    Tablero tablero(10, 10);
+    
+    srand(time(NULL));
+    tablero.modo_aleatorio(3);
+    tablero.PrintTest();
  
   } else {
     int filas, columnas, modo;
@@ -86,7 +97,7 @@ int main(void) {
             if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)))
               tablero.set_final(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
             if((event.type == sf::Event::MouseButtonPressed) && (sf::Mouse::isButtonPressed(sf::Mouse::Left)))
-            	tablero.set_obstaculo(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+            	tablero.set_obstaculo(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, true);
         }
         window.clear(sf::Color::Black);   //Limpia la ventana con el color negro.   ES OBLIGATORIO.
 
