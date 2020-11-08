@@ -14,16 +14,40 @@ Tablero::Tablero(int filas, int columnas) {
   for (int i = 0; i < (filas_ + 2); i++) {
     for (int j = 0; j < (columnas_ + 2); j++) {
       if ((i == 0) || (i == filas + 1) || (j == 0) || (j == columnas_ + 1))
-        malla_[position(i, j)] = new Celda(i, j, 3);					//Para crear el borde mediante obstáculos.
+        malla_[position(i, j)] = new Celda(i, j, OBSTACULO);					//Para crear el borde mediante obstáculos.
       else
-        malla_[position(i, j)] = new Celda(i, j, 0);
+        malla_[position(i, j)] = new Celda(i, j, VACIO);
+
     }
   }
-  i_inicial = -1;
-  j_inicial = -1;
-  i_final = -1;
-  j_final = -1;
 }
+//Cuando se crea la tabla se actualizan los vecinos, si no pertenece a la malla
+//el vecino no se crea
+void Tablero::update_vecinos( int i, int j) {
+  for (size_t k = 0; k < f.size(); k++){
+    if (isInMalla(i + f[k], j + c[k]) ) {
+      //Si el vecino pertenece a la malla se guarda
+      malla_[position(i,j)]->AddVecino(malla_[position(i+f[k], j+c[k])]);
+    }
+  }    
+}
+
+
+//De los vecinos que tiene esta celda, se elimina de sus listas el obstaculo
+void Tablero::EliminarDeListasVecinos(Celda* celda_obstaculo) {
+  for ( Celda* vecino : celda_obstaculo->GetVecinos() ) {
+    vecino->EliminaVecino(celda_obstaculo);
+  }
+}
+
+//Este metodo comprueba que las coordenadas estan dentro de la malla
+bool Tablero::isInMalla(int i, int j) {
+  if( i <= 0 || i > filas_+1 || j <= 0 || j >= columnas_+1) {
+    return false;
+  } else 
+    return true;
+}
+
 
 //Destructor.
 Tablero::~Tablero(void) {
@@ -34,9 +58,9 @@ Tablero::~Tablero(void) {
 
 void Tablero::set_inicial(int i, int j) {
   position_cursor(i, j);
-  malla_[position(i, j)] -> setEstado(1);
+  malla_[position(i, j)] -> setEstado(INICIO);
   if (i_inicial != -1) {
-    malla_[position(i_inicial, j_inicial)] -> setEstado(0);
+    malla_[position(i_inicial, j_inicial)] -> setEstado(FINAL);
   } 
   if ((i_inicial == i) && (j_inicial == j)) {
     i_inicial = -1;
@@ -49,9 +73,9 @@ void Tablero::set_inicial(int i, int j) {
 
 void Tablero::set_final(int i, int j) {
   position_cursor(i, j);
-  malla_[position(i, j)] -> setEstado(2);
+  malla_[position(i, j)] -> setEstado(FINAL);
   if (i_final != -1) {
-    malla_[position(i_final, j_final)] -> setEstado(0);
+    malla_[position(i_final, j_final)] -> setEstado(VACIO);
   } 
   if ((i_final == i) && (j_final == j)) {
     i_final = -1;
@@ -65,10 +89,11 @@ void Tablero::set_final(int i, int j) {
 
 void Tablero::set_obstaculo(int i, int j) {
   position_cursor(i, j);
-  if (malla_[position(i, j)] -> getEstado() == 3) {
-    malla_[position(i, j)] -> setEstado(0);
+  if (malla_[position(i, j)] -> getEstado() == OBSTACULO) {
+    malla_[position(i, j)] -> setEstado(VACIO);
   } else {
-      malla_[position(i, j)] -> setEstado(3);
+      set_vecinos(malla_[position(i, j)]);
+      malla_[position(i, j)] -> setEstado(OBSTACULO);
   }
 }
 
@@ -77,8 +102,8 @@ void Tablero::modo_aleatorio(int num_obstaculos) {
   while (contador < num_obstaculos) {
     i_pos = rand() % filas_ + 1;
     j_pos = rand() % columnas_ + 1;
-    if (malla_[position(i_pos, j_pos)] -> getEstado() == 0) {
-      malla_[position(i_pos, j_pos)] -> setEstado(3);
+    if (malla_[position(i_pos, j_pos)] -> getEstado() == VACIO) {
+      malla_[position(i_pos, j_pos)] -> setEstado(OBSTACULO);
       contador++;
     }
   }
