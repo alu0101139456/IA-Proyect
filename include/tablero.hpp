@@ -28,13 +28,15 @@ class Tablero : public sf::Drawable {
   void position_cursor(int &i, int &j);
   int position(int i, int j) const;
   FunHeuristica* heuristica_;
+  Celda* celda_inicial_ = nullptr;
+  Celda* celda_final_ = nullptr;
 
  public:
   Tablero(void);
   Tablero(int filas, int columnas);
   ~Tablero(void);
-  void set_inicial(int i, int j);
-  void set_final(int i, int j);
+  void set_inicial(int i, int j, bool grafico);
+  void set_final(int i, int j, bool grafico);
   void set_obstaculo(int i, int j, bool grafico);
   void modo_aleatorio(int num_obstaculos);
   void redimensionar(sf::RenderWindow& window);
@@ -43,14 +45,18 @@ class Tablero : public sf::Drawable {
   void update_vecinos( int i, int j);
   bool isInMalla(int i, int j);
 
-  void PrintTest();
+  void PrintVecinoTest();
+  void PrintEstadoTest();
 
   std::vector<Celda*> Aestrella();
+  std::vector<Celda*> Aestrella(Celda* inicio, Celda* final);
   void checkCeldaMenorCoste( std::vector<Celda*>& s_a, uint& win);
   void ReconstruirCamino( std::vector<Celda*>& v, Celda* actual, Celda* temp);
 
   bool InSet( Celda* celda, std::vector<Celda*> set);
   
+  
+  void CaminoMinimo();
 
 };
 

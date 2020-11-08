@@ -4,7 +4,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 
-enum Estado{ VACIO, INICIO, FINAL, OBSTACULO};
+enum Estado{ VACIO, INICIO, FINAL, OBSTACULO, CAMINO};
 
 class Celda : public sf::Sprite {
  private: 
@@ -41,7 +41,6 @@ class Celda : public sf::Sprite {
   inline uint GetCosteAcumulado() { return coste_acumulado_; }
   inline uint GetCosteFinal() { return coste_final_; }
 
-  
 
 
 };

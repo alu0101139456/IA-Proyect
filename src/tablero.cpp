@@ -7,6 +7,7 @@ Tablero::Tablero(void) {
 
 //Constructor.
 Tablero::Tablero(int filas, int columnas) {
+  heuristica_ = new DistanciaManhattan();
   filas_ = filas;
   columnas_ = columnas;
   celdas_size_ = 45;
@@ -39,7 +40,7 @@ void Tablero::update_vecinos( int i, int j) {
 
 }
 
-void Tablero::PrintTest() {
+void Tablero::PrintVecinoTest() {
   for (int i = 1; i < (filas_ + 1); i++) {
     for (int j = 1; j < (columnas_ + 1); j++) {
       std::cout << malla_[position(i,j)]->GetVecinos().size() << " ";
@@ -48,6 +49,17 @@ void Tablero::PrintTest() {
   }
 
 }
+
+void Tablero::PrintEstadoTest() {
+  for (int i = 1; i < (filas_ + 1); i++) {
+    for (int j = 1; j < (columnas_ + 1); j++) {
+      std::cout << malla_[position(i,j)]->getEstado()<< " ";
+    }
+    std::cout << '\n';
+  }
+
+}
+
 
 
 //De los vecinos que tiene esta celda, se elimina de sus listas el obstaculo
@@ -75,11 +87,12 @@ Tablero::~Tablero(void) {
   delete[] malla_;
 }
 
-void Tablero::set_inicial(int i, int j) {
-  position_cursor(i, j);
+void Tablero::set_inicial(int i, int j, bool grafico) {
+  if (grafico) position_cursor(i, j);
   malla_[position(i, j)] -> setEstado(INICIO);
+  celda_inicial_ = malla_[position(i, j)];
   if (i_inicial_ != -1) {
-    malla_[position(i_inicial_, j_inicial_)] -> setEstado(FINAL);
+    malla_[position(i_inicial_, j_inicial_)]->setEstado(VACIO);
   } 
   if ((i_inicial_ == i) && (j_inicial_ == j)) {
     i_inicial_ = -1;
@@ -90,11 +103,12 @@ void Tablero::set_inicial(int i, int j) {
   }
 }
 
-void Tablero::set_final(int i, int j) {
-  position_cursor(i, j);
+void Tablero::set_final(int i, int j, bool grafico) {
+  if (grafico) position_cursor(i, j);
   malla_[position(i, j)] -> setEstado(FINAL);
+  celda_final_ = malla_[position(i, j)];
   if (i_final_ != -1) {
-    malla_[position(i_final_, j_final_)] -> setEstado(VACIO);
+    malla_[position(i_final_, j_final_)]->setEstado(VACIO);
   } 
   if ((i_final_== i) && (j_final_ == j)) {
     i_final_ = -1;
@@ -176,8 +190,55 @@ std::vector<Celda*> Tablero::Aestrella() {
   std::vector<Celda*> camino_final;
   std::vector<Celda*> set_abierto;
   std::vector<Celda*> set_cerrado;
-  Celda* inicio = malla_[position(i_inicial_, j_inicial_)];
-  Celda* final = malla_[position(i_final_, j_final_)];
+  // Celda* inicio = malla_[position(i_inicial_, j_inicial_)];
+  // Celda* final = malla_[position(i_final_, j_final_)];
+  std::cout << "Celda inicial: " << celda_inicial_->Get_i() * filas_ + celda_inicial_->Get_j() - 10 << '\n';
+  celda_inicial_->SetCosteAcumulado(0);
+  celda_inicial_->SetCosteFinal((*heuristica_)(celda_inicial_, celda_final_));
+
+
+  set_abierto.push_back(celda_inicial_);
+
+  std::cout << "El algoritmo comienza" << std::endl;
+  while ( !set_abierto.empty()) {
+    uint win = 0;
+    checkCeldaMenorCoste(set_abierto, win);
+
+    Celda* actual = malla_[position(set_abierto[win]->Get_i(), set_abierto[win]->Get_j())];
+
+    //Si es la misma celda, obtenemos el camino óptimo
+    if ((actual->Get_i() == i_final_) && (actual->Get_j() == j_final_) ) {
+      ReconstruirCamino(camino_final, actual, celda_inicial_);
+      return camino_final;
+    }
+    
+    set_abierto.erase(set_abierto.begin() + win);
+    set_cerrado.push_back(actual);
+    
+    for ( Celda* vecino : actual->GetVecinos() ) {
+      if( InSet(vecino, set_cerrado))
+        continue;
+      int aux = actual->GetCosteAcumulado() + 1;
+
+      if( !InSet(vecino, set_abierto)) {
+        set_abierto.push_back(vecino);
+      } else if ( aux >= vecino->GetCosteAcumulado())
+            continue;
+      
+      vecino->SetPadre(actual);
+      vecino->SetCosteAcumulado(aux);
+      vecino->SetCosteFinal(aux + (*heuristica_)(vecino, celda_final_));
+    }
+  }
+  return camino_final;
+}
+
+std::vector<Celda*> Tablero::Aestrella(Celda* inicio, Celda* final) {
+  std::vector<Celda*> camino_final;
+  std::vector<Celda*> set_abierto;
+  std::vector<Celda*> set_cerrado;
+  // Celda* inicio = malla_[position(i_inicial_, j_inicial_)];
+  // Celda* final = malla_[position(i_final_, j_final_)];
   inicio->SetCosteAcumulado(0);
   inicio->SetCosteFinal((*heuristica_)(inicio, final));
 
@@ -219,18 +280,22 @@ std::vector<Celda*> Tablero::Aestrella() {
 
 
 void Tablero::checkCeldaMenorCoste( std::vector<Celda*>& s_a, uint& win) {
-for (uint i = 0; i < s_a.size(); i++) {
+  for (uint i = 0; i < s_a.size(); i++) {
     if(s_a[i]->GetCosteFinal() < s_a[win]->GetCosteFinal())
       win = i; //Buscamos la celda con menor coste final;
   }
+  // std::cout << "Celda de menor coste es: " << win << std::endl; // DEBUG
 }
 
 
 void Tablero::ReconstruirCamino( std::vector<Celda*>& v, Celda* actual, Celda* temp) {
+  std::cout << "Reconstruyendo camino" << std::endl; // DEBUG
   Celda* a = actual;
   v.push_back(a);
   while (a->Get_i() != temp->Get_i() || a->Get_j() != temp->Get_j()) { //Controla que no llegue a la celda inicial
     v.push_back(a->GetPadre());
+    a->setEstado(CAMINO);
+    a = a->GetPadre();
   }  
 }
 
@@ -244,3 +309,21 @@ bool Tablero::InSet(Celda* celda, std::vector<Celda*> set) {
 }
 
 
+void Tablero::CaminoMinimo() {
+  double t_inicio, t_stop;
+
+  t_inicio = clock();
+  std::vector<Celda*> camino_minimo = Aestrella();
+  t_stop = clock();
+
+  double tiempo_total = (t_stop-t_inicio)/CLOCKS_PER_SEC;
+
+  std::cout << "Numero de saltos: " << camino_minimo.size() << std::endl;
+  std::cout << "Tiempo de ejecución: " << tiempo_total << std::endl;
+
+  for(Celda* actual: camino_minimo) {
+    std::cout << actual->Get_i()*columnas_ + actual->Get_j() - 10 << ' ';
+  }
+  std::cout << std::endl; // DEBUG
+
+}

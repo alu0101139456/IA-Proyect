@@ -37,6 +37,9 @@ void Celda::cargar_textura(int estado) {
     case 3:
       texture.loadFromFile("images/obstaculo.png", sf::IntRect(0,0,45,45));
       break;
+    case 4:
+      texture.loadFromFile("images/camino.png", sf::IntRect(0,0,45,45));
+      break;
   }
   this->setTexture(texture);
 }

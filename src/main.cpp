@@ -16,45 +16,26 @@ int main(void) {
   // std::cin >> modo;
 
   if ( 1) {
-    /*std::string fichero;
-    system("clear");
-    std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
-    system("ls *.txt");
-    std::cout << "Introduzca el nombre del fichero de entrada:  ";
-    std::cin >> fichero;
-    std::cout << std::endl;
-    std::ifstream infile(fichero);
-    int filas, columnas, nObst, c1, c2;
-    int n = 0;
 
-    infile >> filas;
-    infile >> columnas;
-    Tablero tablero(filas, columnas);
 
-    infile >> nObst;
-    while (n < nObst) {
-      if (infile.eof()) {
-        std::cout << "El fichero no ha podido ser leído" << std::endl;
-        break;
-      }
-      infile >> c1;
-      infile >> c2;
-      tablero.set_obstaculo(c1, c2);
-      n++;
-    }
-    infile.close();
-    std::cout << tablero;*/
-    int filas, columnas, modo;
-    // std::cout << "Introduzca las dimensiones del entorno:" << std::endl;
-    // std::cout << "Filas: ";
-    // std::cin >> filas;
-    // std::cout << "Columnas: ";
-    // std::cin >> columnas;
     Tablero tablero(10, 10);
     
     srand(time(NULL));
-    tablero.modo_aleatorio(3);
-    tablero.PrintTest();
+    tablero.modo_aleatorio(15);
+    tablero.PrintVecinoTest();
+    tablero.set_inicial(3,1,false);
+    tablero.set_final(9,4,false);
+    std::cout << "\n\n";
+    tablero.PrintEstadoTest();
+    tablero.CaminoMinimo();
+    tablero.PrintEstadoTest();
+
+
+
+
+
+
+
  
   } else {
     int filas, columnas, modo;
@@ -93,9 +74,9 @@ int main(void) {
             if((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
             	window.close();
             if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)))
-              tablero.set_inicial(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+              tablero.set_inicial(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, true);
             if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Enter)))
-              tablero.set_final(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+              tablero.set_final(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, true);
             if((event.type == sf::Event::MouseButtonPressed) && (sf::Mouse::isButtonPressed(sf::Mouse::Left)))
             	tablero.set_obstaculo(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, true);
         }
