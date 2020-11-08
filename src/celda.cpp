@@ -40,3 +40,15 @@ void Celda::cargar_textura(int estado) {
   }
   this->setTexture(texture);
 }
+
+
+bool Celda::EliminaVecino(Celda* eliminaVecino) {
+  for (size_t i = 0; i < vecinos_.size(); i++) {
+    if ( eliminaVecino == vecinos_[i]) {
+      vecinos_[i] = nullptr;
+      return true;
+    }
+  }
+  return false;
+  
+}
