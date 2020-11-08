@@ -12,8 +12,8 @@ class Celda : public sf::Sprite {
   int j_;
   int estado_;
   sf::Texture texture;
-  int coste_acumulado_;
-  int coste_final_;
+  uint coste_acumulado_ = -1;
+  uint coste_final_ = -1;
   std::vector<Celda*> vecinos_; //Almacena las celdas accesibles(sin obstaculos)
   Celda* padre_; //Almacena la celda vecina con menor coste de llegada(CaminoMinimo)
 
@@ -34,6 +34,14 @@ class Celda : public sf::Sprite {
   inline void AddVecino(Celda* celda) { vecinos_.push_back(celda); }
   inline std::vector<Celda*> GetVecinos() { return vecinos_; }
   bool EliminaVecino( Celda* eliminaVecino);
+  
+  inline void SetCosteAcumulado(uint g) { coste_acumulado_ = g; }
+  inline void SetCosteFinal(uint f) { coste_final_ = f; }
+
+  inline uint GetCosteAcumulado() { return coste_acumulado_; }
+  inline uint GetCosteFinal() { return coste_final_; }
+
+  
 
 
 };
