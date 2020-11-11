@@ -9,7 +9,7 @@ FunHeuristica::~FunHeuristica(){}
 DistanciaEuclidea::DistanciaEuclidea(): FunHeuristica(){}
 
 float DistanciaEuclidea::operator()(const Celda* i, const Celda* f){
-  return (sqrt(pow((f->Get_i()-i->Get_i()),2) +pow((f->Get_j()-i->Get_j()),2)));
+  return (sqrt(((i->Get_i()-f->Get_i()) * (i->Get_i()-f->Get_i())) + ((i->Get_j()-j ->Get_j())*(i->Get_j()-j ->Get_j()))));
 }
 
 
