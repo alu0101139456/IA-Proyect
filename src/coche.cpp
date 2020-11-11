@@ -39,6 +39,7 @@ bool Coche::a_estrella(Tablero& tablero) {
   clock_t t;
   t = clock();
   std::vector<Celda*> open;
+  std::vector<Celda*> close;
   celda_final_ = tablero.get_final();
   Celda* celda_actual = tablero.get_inicial();
 
@@ -109,9 +110,9 @@ void Coche::gestionar_vecino(std::vector<Celda*>& open, Celda* celda_actual, Cel
   
 void Coche::reconstruir_camino(Celda* celda, Tablero& tablero) {
   Celda* optima = celda->getPadre();
-  while (optima->getPadre() != 0) {
-    optima->setEstado(4);
-    optima = (optima -> getPadre());
+  while (optima->getPadre() != nullptr ) {
+    optima->setEstado(CAMINO);
+    optima = optima -> getPadre();
   }
   std::cout << "SOLUCIÓN ENCONTRADA" << std::endl;
 }

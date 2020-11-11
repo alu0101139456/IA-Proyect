@@ -8,74 +8,57 @@
 
 int main(void) {
 
-  //       /*if (!texture.loadFromFile("textura3.png", sf::IntRect(0,0,80,80)));
-  //       	return EXIT_FAILURE;
-  //       }*/
+        /*if (!texture.loadFromFile("textura3.png", sf::IntRect(0,0,80,80)));
+        	return EXIT_FAILURE;
+        }*/
 
   // int modo;
   // std::cout << "¿Desea introducir las características del entorno mediante fichero(0) o de forma manual(1)? ";
   // std::cin >> modo;
 
-  // if (modo == 0) {
-  //   /*std::string fichero;
-  //   system("clear");
-  //   std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
-  //   system("ls *.txt");
-  //   std::cout << "Introduzca el nombre del fichero de entrada:  ";
-  //   std::cin >> fichero;
-  //   std::cout << std::endl;
-  //   std::ifstream infile(fichero);
-  //   int filas, columnas, nObst, c1, c2;
-  //   int n = 0;
+  if (1) {
 
-  //   infile >> filas;
-  //   infile >> columnas;
-  //   Tablero tablero(filas, columnas);
-
-  //   infile >> nObst;
-  //   while (n < nObst) {
-  //     if (infile.eof()) {
-  //       std::cout << "El fichero no ha podido ser leído" << std::endl;
-  //       break;
-  //     }
-  //     infile >> c1;
-  //     infile >> c2;
-  //     tablero.set_obstaculo(c1, c2);
-  //     n++;
-  //   }
-  //   infile.close();
-  //   std::cout << tablero;*/
- 
-  // } else {
-  //   int filas, columnas, modo;
-  //   std::cout << "Introduzca las dimensiones del entorno:" << std::endl;
-  //   std::cout << "Filas: ";
-  //   std::cin >> filas;
-  //   std::cout << "Columnas: ";
-  //   std::cin >> columnas;
-
-  //   //Hay que controlar si el usuario introduce números menores o iguales que cero.
-
-
-    
-  //   Tablero tablero(filas, columnas);
-  //   Coche coche;
-    
-  //   std::cout << "¿Desea introducir los obstáculos de manera aleatoria(0) o manual(1)? ";
-  //   std::cin >> modo;
-
-  //   if (modo == 0) {
-  //     int num_obstaculos;
-  //     std::cout << "Introduzca el número de obstáculos que habrán en el entorno: ";
-  //     std::cin >> num_obstaculos;
-  //     srand(time(NULL));
-  //     tablero.modo_aleatorio(num_obstaculos);
-  //   }
-
-    Tablero tablero(100, 100);
+    int a = 10;
+    Tablero tablero(a, a);
     Coche coche;
     tablero.modo_aleatorio(0);
     coche.SetHeuristic(Euclidea);
+    tablero.set_inicial(0,0, false);
+    tablero.set_final(a-1, a-1, false);
+    if(!coche.a_estrella(tablero)) {
+      std::cout << "No se ha podido planificar una trayectoria desde el inicio al final.\n";
+    }
+    tablero.PrintTable();
+
+
+ 
+  } else {
+    int filas, columnas, modo;
+    std::cout << "Introduzca las dimensiones del entorno:" << std::endl;
+    std::cout << "Filas: ";
+    std::cin >> filas;
+    std::cout << "Columnas: ";
+    std::cin >> columnas;
+
+    //Hay que controlar si el usuario introduce números menores o iguales que cero.
+
+
+    
+    Tablero tablero(filas, columnas);
+    Coche coche;
+    
+    std::cout << "¿Desea introducir los obstáculos de manera aleatoria(0) o manual(1)? ";
+    std::cin >> modo;
+
+    if (modo == 0) {
+      int num_obstaculos;
+      std::cout << "Introduzca el número de obstáculos que habrán en el entorno: ";
+      std::cin >> num_obstaculos;
+      srand(time(NULL));
+      tablero.modo_aleatorio(num_obstaculos);
+    }
+
+   
 
     // coche.SetHeuristic(Manhattan);
 
@@ -94,16 +77,17 @@ int main(void) {
             if((event.type == sf::Event::KeyPressed) && (event.key.code == sf::Keyboard::Escape))
             	window.close();
             if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)))
-              tablero.set_inicial(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+              tablero.set_inicial(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, true);
             if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)))
-              tablero.set_final(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+              tablero.set_final(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, true);
             if((event.type == sf::Event::MouseButtonPressed) && (sf::Mouse::isButtonPressed(sf::Mouse::Left)))
-              tablero.set_obstaculo(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y);
+              tablero.set_obstaculo(sf::Mouse::getPosition(window).x, sf::Mouse::getPosition(window).y, true);
             if ((event.type == sf::Event::KeyPressed) && (sf::Keyboard::isKeyPressed(sf::Keyboard::A)))
-              if(!coche.a_estrella(tablero)) {
-                std::cout << "No se ha podido planificar una trayectoria desde el inicio al final.\n";
-                window.close();
-              }
+              
+            if(!coche.a_estrella(tablero)) {
+              std::cout << "No se ha podido planificar una trayectoria desde el inicio al final.\n";
+              window.close();
+            }
         }
 
         window.clear(sf::Color::Black);   //Limpia la ventana con el color negro.   ES OBLIGATORIO.
@@ -121,7 +105,7 @@ int main(void) {
         
     //Controlar que las posiciones de los obstáculos están dentro del tablero y que no coinciden con la posición inicial ni con la final.
    
-  // }
+  }
 
   
  
