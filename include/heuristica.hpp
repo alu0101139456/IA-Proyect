@@ -8,7 +8,7 @@ class FunHeuristica {
  public:
   FunHeuristica();
   virtual ~FunHeuristica();
-  virtual int operator()(const Celda*, const Celda*) = 0;
+  virtual float operator()(const Celda*, const Celda*) = 0;
 };
 
 
@@ -16,7 +16,7 @@ class FunHeuristica {
 class DistanciaEuclidea : public FunHeuristica {
  public:
   DistanciaEuclidea();
-  int operator()(const Celda*, const Celda*);
+  float operator()(const Celda*, const Celda*);
 };
 
 
@@ -24,7 +24,7 @@ class DistanciaEuclidea : public FunHeuristica {
 class DistanciaManhattan : public FunHeuristica {
  public:
   DistanciaManhattan();
-  int operator()(const Celda*, const Celda*);
+  float operator()(const Celda*, const Celda*);
 };
 
 #endif // F_HEURISTICAS_H

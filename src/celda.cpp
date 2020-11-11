@@ -1,4 +1,4 @@
-#include "celda.hpp"
+#include "../include/celda.hpp"
 
 //Constructor por defecto.
 Celda::Celda(void) : sf::Sprite() {}
@@ -9,6 +9,11 @@ Celda::Celda(int i, int j, int estado) : sf::Sprite() {
   j_ = j;
   estado_ = estado;
   cargar_textura(estado_);
+  costeG_ = MAXFLOAT;
+  costeF_ = MAXFLOAT;
+  padre_ = nullptr;
+  evaluado_ = false;
+  frontera_ = false;
 }
 
 //Destructor.
@@ -18,10 +23,59 @@ int Celda::getEstado(void) const {
   return estado_;
 }
 
+float Celda::getCosteF(void) const {
+  return costeF_;
+}
+
+float Celda::getCosteG(void) const {
+  return costeG_;
+}
+
+int Celda::Get_i(void) const {
+  return i_;
+}
+
+int Celda::Get_j(void) const {
+  return j_;
+}
+
+bool Celda::get_evaluado(void) {
+  return evaluado_;
+}
+
+bool Celda::get_frontera(void) {
+  return frontera_;
+}
+
+void Celda::setCosteF(float coste) {
+  costeF_ = coste;
+}
+
+void Celda::setCosteG(float coste) {
+  costeG_ = coste;
+}
+
 void Celda::setEstado(int estado) {
   estado_ = estado;
   cargar_textura(estado);
 }
+
+void Celda::setPadre(Celda* padre) {
+  padre_ = padre;
+}
+
+void Celda::set_evaluado(bool evaluado) {
+  evaluado_ = evaluado;
+}
+
+void Celda::set_frontera(bool frontera) {
+  frontera_ = frontera;
+}
+
+Celda* Celda::getPadre(void) {
+  return padre_;
+}
+
 
 void Celda::cargar_textura(int estado) {
   switch(estado) {
@@ -44,14 +98,10 @@ void Celda::cargar_textura(int estado) {
   this->setTexture(texture);
 }
 
+bool Celda::operator==(const Celda& celda1) const {
+  return ((i_ == celda1.i_) && (j_ == celda1.j_));
+} 
 
-bool Celda::EliminaVecino(Celda* eliminaVecino) {
-  for (size_t i = 0; i < vecinos_.size(); i++) {
-    if ( eliminaVecino == vecinos_[i]) {
-      vecinos_.erase(vecinos_.begin() + i);
-      return true;
-    }
-  }
-  return false;
-  
+bool Celda::operator<(const Celda& celda1) const {
+  return (costeF_ < celda1.costeF_);
 }
