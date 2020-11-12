@@ -8,6 +8,7 @@
 #include "tablero.hpp"
 #include "celda.hpp"
 #include "heuristica.hpp"
+#include <set>
 
 enum HeuristicFuntion{ Manhattan, Euclidea };
 

@@ -18,7 +18,7 @@ int main(void) {
 
   if (1) {
 
-    int a = 10;
+    int a = 20;
     Tablero tablero(a, a);
     Coche coche;
     tablero.modo_aleatorio(0);
