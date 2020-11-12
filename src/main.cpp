@@ -11,11 +11,53 @@ int main(void) {
         /*if (!texture.loadFromFile("textura3.png", sf::IntRect(0,0,80,80)));
         	return EXIT_FAILURE;
         }*/
+  //#ifdef EXPERIMENTAL
+    std::string fichero;
+    system("clear");
+    std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
+    system("ls *.txt");
+    std::cout << "Introduzca el nombre del fichero de entrada:  ";
+    std::cin >> fichero;
+    std::cout << std::endl;
+    std::ifstream infile(fichero);
+    int filas = 0, columnas = 0, inicialx, inicialy, finalx, finaly, nObst, c1, c2, h;
+    int n = 0;
 
-  // int modo;
-  // std::cout << "¿Desea introducir las características del entorno mediante fichero(0) o de forma manual(1)? ";
-  // std::cin >> modo;
+    infile >> filas;
+    infile >> columnas;
+    Tablero tablero(filas, columnas);
+    Coche coche;
+    
+    infile >> inicialx;
+    infile >> inicialy;
+    tablero.set_inicial(inicialx, inicialy, false);
 
+    infile >> finalx;
+    infile >> finaly;
+    tablero.set_final(finalx, finaly, false);
+
+    infile >> h;
+    coche.SetHeuristic(h);
+
+    infile >> nObst;
+    while (n < nObst) {
+      if (infile.eof()) {
+        std::cout << "El fichero no ha podido ser leído" << std::endl;
+        break;
+      }
+      infile >> c1;
+      infile >> c2;
+      tablero.set_obstaculo(c1, c2, false);
+      n++;
+    }
+    infile.close();
+
+    if(!coche.a_estrella(tablero)) {
+      std::cout << "No se ha podido planificar una trayectoria desde el inicio al final.\n";
+    }
+    tablero.PrintTable();
+  
+  /*#else 
   if (1) {
 
     int a = 20;
@@ -51,11 +93,11 @@ int main(void) {
     std::cin >> modo;
 
     if (modo == 0) {
-      int num_obstaculos;
-      std::cout << "Introduzca el número de obstáculos que habrán en el entorno: ";
-      std::cin >> num_obstaculos;
+      int percentage;
+      std::cout << "Introduzca el porcentaje de obstáculos que habrá en el entorno: ";
+      std::cin >> percentage;
       srand(time(NULL));
-      tablero.modo_aleatorio(num_obstaculos);
+      tablero.modo_aleatorio(percentage);
     }
 
    
@@ -108,6 +150,6 @@ int main(void) {
   }
 
   
- 
+  #endif*/
   return 0;
 }

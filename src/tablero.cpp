@@ -85,8 +85,9 @@ void Tablero::set_obstaculo(int i, int j, bool graphic) {
   }
 }
 
-void Tablero::modo_aleatorio(int num_obstaculos) {
-  int i_pos, j_pos, contador = 0;
+void Tablero::modo_aleatorio(int percentage) {
+  int i_pos, j_pos, contador = 0, num_obstaculos;
+  num_obstaculos = (((filas_ * columnas_) * percentage) / 100);
   while (contador < num_obstaculos) {
     i_pos = rand() % filas_;
     j_pos = rand() % columnas_;
