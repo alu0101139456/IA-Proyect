@@ -11,7 +11,7 @@ int main(void) {
         /*if (!texture.loadFromFile("textura3.png", sf::IntRect(0,0,80,80)));
         	return EXIT_FAILURE;
         }*/
-  #ifdef EXPERIMENTAL
+  //#ifdef EXPERIMENTAL
     std::string fichero;
     system("clear");
     std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
@@ -20,7 +20,7 @@ int main(void) {
     std::cin >> fichero;
     std::cout << std::endl;
     std::ifstream infile(fichero);
-    int filas, columnas, inicialx, inicialy, finalx, finaly, nObst, c1, c2, h;
+    int filas = 0, columnas = 0, inicialx, inicialy, finalx, finaly, nObst, c1, c2, h;
     int n = 0;
 
     infile >> filas;
@@ -57,7 +57,7 @@ int main(void) {
     }
     tablero.PrintTable();
   
-  #else 
+  /*#else 
   if (1) {
 
     int a = 20;
@@ -150,6 +150,6 @@ int main(void) {
   }
 
   
-  #endif
+  #endif*/
   return 0;
 }

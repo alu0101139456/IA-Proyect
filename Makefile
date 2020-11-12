@@ -17,7 +17,7 @@ run: clean all
 	./$(BIN)/$(EXECUTABLE) 
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
-	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ -lsfml-graphics -lsfml-window -lsfml-system -D EXPERIMENTAL
+	$(CXX) $(CXX_FLAGS) -I$(INCLUDE) -L$(LIB) $^ -o $@ -lsfml-graphics -lsfml-window -lsfml-system
 
 clean:
 	-rm $(BIN)/main
