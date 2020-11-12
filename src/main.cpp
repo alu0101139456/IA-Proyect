@@ -14,8 +14,8 @@ int main(void) {
   //#ifdef EXPERIMENTAL
     std::string fichero;
     system("clear");
-    std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
-    system("ls TestFiles/*.txt");
+    std::cout << "Los ficheros \".ia\" que se pueden leer son: " << std::endl;
+    system("ls ./TestFiles/*.ia");
     std::cout << "Introduzca el nombre del fichero de entrada:  ";
     std::cin >> fichero;
     std::cout << std::endl;
