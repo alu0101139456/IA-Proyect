@@ -39,6 +39,7 @@ bool Coche::a_estrella(Tablero& tablero) {
   clock_t t;
   t = clock();
   std::vector<Celda*> open;
+  std::vector<Celda*> close;
   celda_final_ = tablero.get_final();
   Celda* celda_actual = tablero.get_inicial();
 
@@ -48,7 +49,16 @@ bool Coche::a_estrella(Tablero& tablero) {
   celda_actual -> set_frontera(true);
   
   while (!open.empty()) {
-    celda_actual = *open.begin();
+    
+    float min = MAXFLOAT;
+    for (size_t i = 0; i < open.size(); i++) {
+      // std::cout << "[" << open[i]->getCosteF() << "] "; 
+      if( open[i]->getCosteF() < min ) { 
+        min = open[i]->getCosteF();
+        celda_actual = open[i];
+      }
+    }
+    // std::cout << " Minimo: " << min << std::endl;    
 
     if (*celda_actual == *GetMeta()) {
       t = clock() - t;
@@ -104,14 +114,16 @@ void Coche::gestionar_vecino(std::vector<Celda*>& open, Celda* celda_actual, Cel
       open.push_back(celda_vecina);
   }
   celda_vecina->setPadre(celda_actual);
-  std::sort (open.begin(), open.end()); 
+  // std::sort (open.begin(), open.end()); 
+ 
+  
 }
   
 void Coche::reconstruir_camino(Celda* celda, Tablero& tablero) {
   Celda* optima = celda->getPadre();
-  while (optima->getPadre() != 0) {
-    optima->setEstado(4);
-    optima = (optima -> getPadre());
+  while (optima->getPadre() != nullptr ) {
+    optima->setEstado(CAMINO);
+    optima = optima -> getPadre();
   }
   std::cout << "SOLUCIÓN ENCONTRADA" << std::endl;
 }

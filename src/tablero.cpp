@@ -49,39 +49,39 @@ Celda* Tablero::get_final(void) {
   return final_;
 }
 
-void Tablero::set_inicial(int i, int j) {
-  position_cursor(i, j);
-  malla_[position(i, j)] -> setEstado(1);
-  if (inicial_ != 0) {
-    inicial_ -> setEstado(0);
+void Tablero::set_inicial(int i, int j, bool graphic) {
+  if( graphic)  position_cursor(i, j);
+  malla_[position(i, j)] -> setEstado(INICIO);
+  if (inicial_ != nullptr ) {
+    inicial_ -> setEstado(VACIO);
   }
-  if (&inicial_ == &malla_[position(i, j)]) {
-    inicial_ = 0;
+  if (inicial_ == malla_[position(i, j)]) {
+    inicial_ = nullptr;
   } else {
       inicial_ = &(*malla_[position(i, j)]);
   }
 }
 
-void Tablero::set_final(int i, int j) {
-  position_cursor(i, j);
-  malla_[position(i, j)] -> setEstado(2);
-  if (final_ != 0) {
-    final_ -> setEstado(0);
+void Tablero::set_final(int i, int j, bool graphic) {
+  if( graphic)  position_cursor(i, j);
+  malla_[position(i, j)] -> setEstado(FINAL);
+  if (final_ != nullptr) {
+    final_ -> setEstado(VACIO);
   } 
-  if (&final_ == &malla_[position(i, j)]) {
-    final_ = 0;
+  if (final_ == malla_[position(i, j)]) {
+    final_ = nullptr;
   } else {
       final_ = &(*malla_[position(i, j)]);
   }
 }
 
 
-void Tablero::set_obstaculo(int i, int j) {
-  position_cursor(i, j);
-  if (malla_[position(i, j)] -> getEstado() == 3) {
-    malla_[position(i, j)] -> setEstado(0);
+void Tablero::set_obstaculo(int i, int j, bool graphic) {
+  if( graphic)  position_cursor(i, j);
+  if (malla_[position(i, j)]->getEstado() == OBSTACULO) {
+    malla_[position(i, j)]->setEstado(VACIO);
   } else {
-      malla_[position(i, j)] -> setEstado(3);
+      malla_[position(i, j)]->setEstado(OBSTACULO);
   }
 }
 
@@ -90,8 +90,8 @@ void Tablero::modo_aleatorio(int num_obstaculos) {
   while (contador < num_obstaculos) {
     i_pos = rand() % filas_;
     j_pos = rand() % columnas_;
-    if (malla_[position(i_pos, j_pos)] -> getEstado() == 0) {
-      malla_[position(i_pos, j_pos)] -> setEstado(3);
+    if (malla_[position(i_pos, j_pos)]->getEstado() == 0) {
+      malla_[position(i_pos, j_pos)]->setEstado(OBSTACULO);
       contador++;
     }
   }
@@ -138,4 +138,14 @@ void Tablero::position_cursor(int &i, int &j) {
   }
   i = j_aux;
   j = i_aux;
+}
+
+void Tablero::PrintTable() {
+  for (int i = 0; i < filas_; i++) {
+    for (int j = 0; j < columnas_; j++) {			
+        std::cout << malla_[position(i, j)]->getEstado() << " ";
+    }
+    std::cout << "\n";
+  }
+
 }

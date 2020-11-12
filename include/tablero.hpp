@@ -14,7 +14,7 @@ class Tablero : public sf::Drawable {
   Celda* inicial_= nullptr;
   Celda* final_= nullptr;
   Celda** malla_ = nullptr;
-  float celdas_size_;
+  float celdas_size_ = 0.0;
   void position_cursor(int &i, int &j);
   int position(int i, int j) const;
 
@@ -27,13 +27,13 @@ class Tablero : public sf::Drawable {
   Celda* get_celda(int i, int j);
   Celda* get_inicial(void);
   Celda* get_final(void);
-  void set_inicial(int i, int j);
-  void set_final(int i, int j);
-  void set_obstaculo(int i, int j);
+  void set_inicial(int i, int j, bool);
+  void set_final(int i, int j, bool);
+  void set_obstaculo(int i, int j, bool);
   void modo_aleatorio(int num_obstaculos);
   void redimensionar(sf::RenderWindow& window);
   virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-
+  void PrintTable();
 
 };
 

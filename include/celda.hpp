@@ -13,9 +13,9 @@ class Celda : public sf::Sprite {
   int i_;
   int j_;
   int estado_;
-  float costeF_;
-  float costeG_;
-  Celda* padre_;
+  float costeF_ = 0.0;
+  float costeG_= 0.0;
+  Celda* padre_ = nullptr;
   bool evaluado_;
   bool frontera_;
   sf::Texture texture;
