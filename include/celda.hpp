@@ -5,7 +5,7 @@
 #include <values.h>    ////////MIRARLO
 #include <SFML/Graphics.hpp>
 
-enum Estado{ VACIO, INICIO, FINAL, OBSTACULO, CAMINO};
+enum Estado {VACIO, INICIO, FINAL, OBSTACULO, CAMINO};
 
 class Celda : public sf::Sprite {
 
