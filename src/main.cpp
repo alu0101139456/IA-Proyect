@@ -19,16 +19,10 @@ int main(void) {
   
   if (modo == 0) {
     std::string fichero;
-<<<<<<< HEAD
-    system("clear");
-    std::cout << "Los ficheros \".txt\" que se pueden leer son: " << std::endl;
-    system("ls bin/*.txt");
-    std::cout << "Introduzca el nombre del fichero de entrada:  ";
-=======
+
     std::cout << "\nLos ficheros \".txt\" que se pueden leer son: \n";
     system("ls TestFiles/*.txt");
     std::cout << "\nIntroduzca el nombre del fichero de entrada:  ";
->>>>>>> ultimoscambios
     std::cin >> fichero;
     std::cout << "\n";
     std::ifstream infile(fichero);
@@ -38,14 +32,7 @@ int main(void) {
     infile >> filas;
     infile >> columnas;
     Tablero tablero(filas, columnas);
-<<<<<<< HEAD
-    infile >> c1;
-    infile >> c2; 
-    tablero.set_inicial(c1, c2);
-    infile >> c1;
-    infile >> c2; 
-    tablero.set_final(c1, c2);
-=======
+
     
     infile >> inicialx;
     infile >> inicialy;
@@ -57,7 +44,7 @@ int main(void) {
 
     infile >> h;
 
->>>>>>> ultimoscambios
+
     infile >> nObst;
     while (n < nObst) {
       if (infile.eof()) {
