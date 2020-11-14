@@ -1,0 +1,10 @@
+Explicación sobre las teclas que se pueden pulsar en la interfaz gráfica:
+ - Modo fichero: únicamente está habilitado el escape para salir de la ventana.
+ - Modo manual: este modo utiliza las siguiente teclas:
+      - Escape para salir de la ventana.
+      - Colocarse con el ratón sobre la celda y pulsar espacio para ponerla como inicio.
+      - Colocarse con el ratón sobre la celda y pulsar control izquierdo para ponerla como fin.
+      - Colocarse con el ratón sobre la celda y pulsar click izquierdo para ponerla como obstáculo.
+      - Pulsar M para ejecutar el A* con distancia de Manhattan.
+      - Pulsar E para ejecutar el A* con distancia Euclidea.
+      
