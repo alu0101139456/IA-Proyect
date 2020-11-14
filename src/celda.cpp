@@ -19,23 +19,27 @@ Celda::Celda(int i, int j, int estado) : sf::Sprite() {
 //Destructor.
  Celda::~Celda(void) {}
 
-int Celda::getEstado(void) const {
+int Celda::get_estado(void) const {
   return estado_;
 }
 
-float Celda::getCosteF(void) const {
+float Celda::get_costeF(void) const {
   return costeF_;
 }
 
-float Celda::getCosteG(void) const {
+float Celda::get_costeG(void) const {
   return costeG_;
 }
 
-int Celda::Get_i(void) const {
+Celda* Celda::get_padre(void) {
+  return padre_;
+}
+
+int Celda::get_i(void) const {
   return i_;
 }
 
-int Celda::Get_j(void) const {
+int Celda::get_j(void) const {
   return j_;
 }
 
@@ -47,20 +51,20 @@ bool Celda::get_frontera(void) {
   return frontera_;
 }
 
-void Celda::setCosteF(float coste) {
-  costeF_ = coste;
-}
-
-void Celda::setCosteG(float coste) {
-  costeG_ = coste;
-}
-
-void Celda::setEstado(int estado) {
+void Celda::set_estado(int estado) {
   estado_ = estado;
   cargar_textura(estado);
 }
 
-void Celda::setPadre(Celda* padre) {
+void Celda::set_costeF(float coste) {
+  costeF_ = coste;
+}
+
+void Celda::set_costeG(float coste) {
+  costeG_ = coste;
+}
+
+void Celda::set_padre(Celda* padre) {
   padre_ = padre;
 }
 
@@ -71,11 +75,6 @@ void Celda::set_evaluado(bool evaluado) {
 void Celda::set_frontera(bool frontera) {
   frontera_ = frontera;
 }
-
-Celda* Celda::getPadre(void) {
-  return padre_;
-}
-
 
 void Celda::cargar_textura(int estado) {
   switch(estado) {
@@ -100,8 +99,4 @@ void Celda::cargar_textura(int estado) {
 
 bool Celda::operator==(const Celda& celda1) const {
   return ((i_ == celda1.i_) && (j_ == celda1.j_));
-} 
-
-bool Celda::operator<(const Celda& celda1) const {
-  return (costeF_ < celda1.costeF_);
 }

@@ -2,47 +2,43 @@
 #define CELDA
 
 #include <iostream>
-#include <values.h>    ////////MIRARLO
+#include <values.h>
 #include <SFML/Graphics.hpp>
 
-enum Estado {VACIO, INICIO, FINAL, OBSTACULO, CAMINO};
+enum Estado{ LIBRE, INICIO, FINAL, OBSTACULO, CAMINO};
 
 class Celda : public sf::Sprite {
+ public:
+  Celda(void);
+  Celda(int i, int j, int estado);
+  ~Celda(void);
+  int get_estado(void) const;
+  float get_costeF(void) const;
+  float get_costeG(void) const;
+  Celda* get_padre(void);
+  int get_i(void) const;
+  int get_j(void) const;
+  bool get_evaluado(void);
+  bool get_frontera(void);
+  void set_estado(int estado);
+  void set_costeF(float coste);
+  void set_costeG(float coste);
+  void set_padre(Celda* padre);
+  void set_evaluado(bool evaluado);
+  void set_frontera(bool frontera);
+  void cargar_textura(int estado);
+  bool operator==(const Celda& celda1) const;
 
  private:  
   int i_;
   int j_;
   int estado_;
-  float costeF_ = 0.0;
-  float costeG_= 0.0;
-  Celda* padre_ = nullptr;
+  float costeF_;
+  float costeG_;
+  Celda* padre_;
   bool evaluado_;
   bool frontera_;
   sf::Texture texture;
- 
- public:
-  Celda(void);
-  Celda(int i, int j, int estado);
-  ~Celda(void);
-  int getEstado(void) const;
-  float getCosteF(void) const;
-  float getCosteG(void) const;
-  Celda* getPadre(void);
-  int Get_i(void) const;
-  int Get_j(void) const;
-  bool get_evaluado(void);
-    bool get_frontera(void);
-  void setEstado(int estado);
-  void setCosteF(float coste);
-  void setCosteG(float coste);
-  void setPadre(Celda* padre);
-  void set_evaluado(bool evaluado);
-  void set_frontera(bool frontera);
-  void cargar_textura(int estado);
-  bool operator==(const Celda& celda1) const;		//MIRAR SI QUITARLO
-  bool operator<(const Celda& celda1) const;
-
-
 };
 
 #endif
