@@ -1,154 +1,143 @@
 #include "../include/coche.hpp"
 
-Coche::Coche(void) {}
-
-/*Coche::Coche(Tablero& tablero) {
-  tablero_ = tablero;
-}*/
+Coche::Coche(void) {
+  inicial_ = nullptr;
+  final_ = nullptr;
+  actual_ = nullptr;
+  longitud_camino_ = 0;
+  nodos_expandidos_ = 0;
+}
 
 Coche::~Coche(void) {}
 
-bool Coche::SensorUp( Tablero& tablero) {
-  if (GetI() == 0)
+bool Coche::sensor_norte(Tablero& tablero) {
+  if (actual_ -> get_i() == 0)
     return true;
-  return (tablero.get_celda(GetI()- 1, GetJ())->getEstado() == OBSTACULO);
+  return ((tablero.get_celda(actual_ -> get_i() - 1, actual_ -> get_j()) -> get_estado()) == 3);
 }
  
-bool Coche::SensorDown( Tablero& tablero) {
-  if (GetI() == tablero.get_filas() - 1)
+bool Coche::sensor_sur(Tablero& tablero) {
+  if (actual_ -> get_i() == tablero.get_filas() - 1)
     return true;
-  return (tablero.get_celda(GetI() + 1, GetJ())->getEstado() == OBSTACULO);
+  return ((tablero.get_celda(actual_ -> get_i() + 1, actual_ -> get_j()) -> get_estado()) == 3);
 }
 
-bool Coche::SensorLeft( Tablero& tablero) {
-  if (GetJ() == 0)
+bool Coche::sensor_oeste(Tablero& tablero) {
+  if (actual_ -> get_j() == 0)
     return true;
-  return (tablero.get_celda(GetI(), GetJ() - 1)->getEstado() == OBSTACULO);
+  return ((tablero.get_celda(actual_ -> get_i(), actual_ -> get_j() - 1) -> get_estado()) == 3);
 }
 
-bool Coche::SensorRight(Tablero& tablero) {
-  if (GetJ() == tablero.get_columnas() - 1)
+bool Coche::sensor_este(Tablero& tablero) {
+  if (actual_ -> get_j() == tablero.get_columnas() - 1)
     return true;
-  return (tablero.get_celda(GetI(), GetJ() + 1)->getEstado() == OBSTACULO);
+  return ((tablero.get_celda(actual_ -> get_i(), actual_ -> get_j() + 1)->get_estado()) == 3);
 }
 
- 
+float Coche::heuristicas(Celda* celda, Tablero& tablero) {
+  if (heuristica_ == 0) 
+    return (abs((celda -> get_i()) - (final_ -> get_i())) + abs((celda -> get_j()) - (final_ -> get_j())));    //Distancia Manhattan
+  else
+    return (sqrt(pow(((celda -> get_i()) - (final_ -> get_i())), 2) + pow(((celda -> get_j()) - (final_ -> get_j())), 2)));  //Distancia euclidea
+}
 
-bool Coche::a_estrella(Tablero& tablero) {
-  
-  clock_t t;
-  t = clock();
+bool Coche::a_estrella(Tablero& tablero, int heuristica) {
+  float min;
+  int pos = 0;
+  inicial_ = tablero.get_inicial();
+  final_ = tablero.get_final();
+  heuristica_ = heuristica;
+  time_ = clock();
   std::vector<Celda*> open;
-  std::vector<Celda*> close;
-  celda_final_ = tablero.get_final();
-  Celda* celda_actual = tablero.get_inicial();
+  actual_ = tablero.get_inicial();
 
-  celda_actual->setCosteG(0.0);
-  celda_actual->setCosteF((*heuristica_)(celda_actual, GetMeta()));
-  open.push_back(celda_actual);
-  celda_actual -> set_frontera(true);
+  actual_ -> set_costeG(0.0);
+  actual_ -> set_costeF(heuristicas(actual_, tablero));
+  open.push_back(actual_);
+  actual_ -> set_frontera(true);
   
   while (!open.empty()) {
-    
-    float min = MAXFLOAT;
-    for (size_t i = 0; i < open.size(); i++) {
-      // std::cout << "[" << open[i]->getCosteF() << "] "; 
-      if( open[i]->getCosteF() < min ) { 
-        min = open[i]->getCosteF();
-        celda_actual = open[i];
+    min = MAXFLOAT;
+    for (int i = 0; i < open.size(); i++) {
+      if (open[i]->get_costeF() < min) { 
+        min = open[i]->get_costeF();
+        actual_ = open[i];
+        pos = i;
       }
     }
-    // std::cout << " Minimo: " << min << std::endl;    
-
-    if (*celda_actual == *GetMeta()) {
-      t = clock() - t;
-      std::cout << "Execution time: " << float(t)/CLOCKS_PER_SEC << "\n";
-      reconstruir_camino(celda_actual, tablero);
+   
+    if (*actual_ == *final_) {
+      time_ = clock() - time_;
+      reconstruir_camino(actual_);
       return true;
     }
         
-    open.erase(open.begin());
-    celda_actual -> set_frontera(false);
-    celda_actual -> set_evaluado(true);
+    open.erase(open.begin() + pos);
+    actual_ -> set_frontera(false);
+    actual_ -> set_evaluado(true);
+    nodos_expandidos_++;
 
-  UpdatePosition(celda_actual);
-    if (!SensorUp(tablero))
-      gestionar_vecino(open, celda_actual, tablero.get_celda(celda_actual->Get_i() - 1, celda_actual->Get_j()));
-    if (!SensorDown(tablero))
-      gestionar_vecino(open, celda_actual, tablero.get_celda(celda_actual->Get_i() + 1, celda_actual->Get_j()));
-    if (!SensorLeft(tablero))
-      gestionar_vecino(open, celda_actual, tablero.get_celda(celda_actual->Get_i(), celda_actual->Get_j() - 1));
-    if (!SensorRight(tablero))
-      gestionar_vecino(open, celda_actual, tablero.get_celda(celda_actual->Get_i(), celda_actual->Get_j() + 1));
-
-    
+    if (!sensor_norte(tablero))
+      gestionar_vecino(open, tablero.get_celda(actual_ -> get_i() - 1, actual_ -> get_j()), tablero);
+    if (!sensor_sur(tablero))
+      gestionar_vecino(open, tablero.get_celda(actual_ -> get_i() + 1, actual_ -> get_j()), tablero);
+    if (!sensor_oeste(tablero))
+      gestionar_vecino(open, tablero.get_celda(actual_ ->get_i(), actual_ -> get_j() - 1), tablero);
+    if (!sensor_este(tablero))
+      gestionar_vecino(open, tablero.get_celda(actual_ -> get_i(), actual_ -> get_j() + 1), tablero);
   }
-  t = clock() - t;
-  std::cout << "Execution time: " << float(t)/CLOCKS_PER_SEC << "\n";
+  time_ = clock() - time_;
   return false;
 }
 
-void Coche::gestionar_vecino(std::vector<Celda*>& open, Celda* celda_actual, Celda* celda_vecina) {
-  float costeG = celda_actual->getCosteG() + 1.0;
+void Coche::gestionar_vecino(std::vector<Celda*>& open, Celda* celda_vecina, Tablero& tablero) {
+  float costeG = actual_ -> get_costeG() + 1.0;  
   if (celda_vecina -> get_evaluado()) {
-    if (costeG < celda_vecina->getCosteG()) {
+    if (costeG < celda_vecina->get_costeG()) {
       celda_vecina -> set_evaluado(false);
-      celda_vecina->setCosteG(costeG);
-      celda_vecina->setCosteF(costeG + (*heuristica_)(celda_vecina, GetMeta()));
+      celda_vecina->set_costeG(costeG);
+      celda_vecina->set_costeF(costeG + heuristicas(celda_vecina, tablero));
       celda_vecina -> set_frontera(true);
       open.push_back(celda_vecina);
-    } else {
-        return;
-    }
-  } else if (celda_vecina->get_frontera()) {
-    if (costeG < celda_vecina->getCosteG()) {
-      celda_vecina->setCosteG(costeG);
-      celda_vecina->setCosteF(costeG + (*heuristica_)(celda_vecina, GetMeta()));
     } else {
         return;
     }
   } else {
-      celda_vecina->setCosteG(costeG);
-      celda_vecina->setCosteF(costeG + (*heuristica_)(celda_vecina, GetMeta()));
+  if (celda_vecina->get_frontera()) {
+    if (costeG < celda_vecina->get_costeG()) {
+      celda_vecina->set_costeG(costeG);
+      celda_vecina->set_costeF(costeG + heuristicas(celda_vecina, tablero));
+    } else {
+        return;
+    }
+  } else {
+      celda_vecina->set_costeG(costeG);
+      celda_vecina->set_costeF(costeG + heuristicas(celda_vecina, tablero));
       celda_vecina -> set_frontera(true);
       open.push_back(celda_vecina);
   }
-  celda_vecina->setPadre(celda_actual);
-  // std::sort (open.begin(), open.end()); 
- 
-  
-}
-  
-void Coche::reconstruir_camino(Celda* celda, Tablero& tablero) {
-  Celda* optima = celda->getPadre();
-  while (optima->getPadre() != nullptr ) {
-    optima->setEstado(CAMINO);
-    optima = optima -> getPadre();
   }
-  std::cout << "SOLUCIÓN ENCONTRADA" << std::endl;
-}
+  celda_vecina->set_padre(actual_);
+} 
 
-
-void Coche::SetHeuristic(uint option) {
-  switch (option) {
-  case 0:
-  std::cout << "Seleccionada Manhattan\n";
-      heuristica_ = new DistanciaManhattan();
-    break;
-  case 1:
-      std::cout << "Seleccionada Euclidea\n";
-      heuristica_ = new DistanciaEuclidea();
-    break;
-  //More heuristics cases
-  default:
-      std::cout << "Seleccionada Euclidea\n";
-      heuristica_ = new DistanciaManhattan();
-    break;
+void Coche::reconstruir_camino(Celda* celda) {
+  Celda* optima = celda->get_padre();
+  while (optima->get_padre() != 0) {
+    optima->set_estado(CAMINO);
+    longitud_camino_++;
+    optima = (optima -> get_padre());
   }
 }
 
-void Coche::UpdatePosition( Celda* updateP) {
-  pos_i_ = updateP->Get_i();
-  pos_j_ = updateP->Get_j();
+int Coche::nodos_expandidos(void) {
+  return nodos_expandidos_;   
+}
+
+int Coche::longitud_camino(void) {
+  return longitud_camino_;
+}
+
+clock_t Coche::tiempo(void) {
+  return time_;
 }
 

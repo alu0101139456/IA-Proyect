@@ -1,46 +1,39 @@
 #ifndef COCHE
-
 #define COCHE
 
 #include <iostream>
-#include <vector>
+#include <list>
+#include <cmath>
 #include <ctime>
+#include <math.h>
+#include <algorithm>
 #include "tablero.hpp"
 #include "celda.hpp"
-#include "heuristica.hpp"
-#include <set>
-
-enum HeuristicFuntion{ Manhattan, Euclidea };
 
 class Coche {
-
- private:
-  int pos_i_;
-  int pos_j_;
-  FunHeuristica* heuristica_;
-  Celda* celda_final_ = nullptr;
-
  public:
   Coche(void);
-  Coche(Celda* inicio, Celda* meta);
   ~Coche(void);
-  
-  bool a_estrella(Tablero& tablero);
-  void SetHeuristic(uint option);
+  bool sensor_norte(Tablero& tablero);
+  bool sensor_sur(Tablero& tablero);
+  bool sensor_oeste(Tablero& tablero);
+  bool sensor_este(Tablero& tablero);
+  float heuristicas(Celda* celda, Tablero& tablero);
+  bool a_estrella(Tablero& tablero, int heuristica);
+  void gestionar_vecino(std::vector<Celda*>& open, Celda* celda_vecina, Tablero& tablero);
+  void reconstruir_camino(Celda* celda);
+  int nodos_expandidos(void);
+  int longitud_camino(void);
+  clock_t tiempo(void);
   
  private:
-  bool SensorUp(Tablero& tablero);
-  bool SensorDown(Tablero& tablero);
-  bool SensorLeft(Tablero& tablero);
-  bool SensorRight(Tablero& tablero);
-  void gestionar_vecino(std::vector<Celda*>& open, Celda* celda_actual, Celda* celda_vecina);
-  void reconstruir_camino(Celda* celda, Tablero& tablero);
-  void UpdatePosition( Celda* updateP);
-  inline int GetI() const { return pos_i_; }
-  inline int GetJ() const { return pos_j_; }
-  inline Celda* GetMeta() { return celda_final_; }
-
-
+  Celda* inicial_;
+  Celda* final_;
+  Celda* actual_;
+  int heuristica_;
+  clock_t time_;
+  int longitud_camino_;
+  int nodos_expandidos_;
 };
 
 #endif
