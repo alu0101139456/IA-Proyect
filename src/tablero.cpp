@@ -1,13 +1,18 @@
-#include "../include/tablero.hpp"
+/**
+  * @author Alberto Mendoza Rodríguez, Ángel Julián Bolaño Campos, Iris Estefanía Pereira Domínguez
+  * @file tablero.cpp
+  * @brief Clase Tablero que representa el entorno en el que se puede mover el coche autónomo.
+  * @details Inteligencia Artificial. Práctica 1 Estrategias de Búsqueda.
+  */
 
-//Constructor por defecto.
+#include "tablero.hpp"
+
 Tablero::Tablero(void) {
   malla_ = nullptr;
   inicial_ = nullptr;
   final_ = nullptr;
 }
 
-//Constructor.
 Tablero::Tablero(int filas, int columnas) {
   filas_ = filas;
   columnas_ = columnas;
@@ -22,7 +27,6 @@ Tablero::Tablero(int filas, int columnas) {
   final_ = 0;
 }
 
-//Destructor.
 Tablero::~Tablero(void) {
   for (int i = 0; i < (filas_ * columnas_); i++)
     delete malla_[i];
@@ -121,7 +125,6 @@ void Tablero::draw(sf::RenderTarget& target, sf::RenderStates states) const {
   }
 }
 
-//Método que calcula la posición del vector en memoria dinámica que es equivalente a la posición (i,j) de la malla.
 int Tablero::position(int i, int j) const {
   return i * columnas_ + j;
 }

@@ -1,9 +1,14 @@
-#include "../include/celda.hpp"
+/**
+  * @author Alberto Mendoza Rodríguez, Ángel Julián Bolaño Campos, Iris Estefanía Pereira Domínguez
+  * @file celda.cpp
+  * @brief Clase Celda que representa cada una de las posiciones del tablero, estas pueden ser la posición inicial o final, estar libre o constituir un obstáculo.
+  * @details Inteligencia Artificial. Práctica 1 Estrategias de Búsqueda.
+  */
 
-//Constructor por defecto.
+#include "celda.hpp"
+
 Celda::Celda(void) : sf::Sprite() {}
 
-//Constructor.
 Celda::Celda(int i, int j, int estado) : sf::Sprite() {
   i_ = i;
   j_ = j;
@@ -12,11 +17,10 @@ Celda::Celda(int i, int j, int estado) : sf::Sprite() {
   costeG_ = MAXFLOAT;
   costeF_ = MAXFLOAT;
   padre_ = nullptr;
-  evaluado_ = false;
-  frontera_ = false;
+  cerrada_ = false;
+  abierta_ = false;
 }
 
-//Destructor.
  Celda::~Celda(void) {}
 
 int Celda::get_estado(void) const {
@@ -43,12 +47,12 @@ int Celda::get_j(void) const {
   return j_;
 }
 
-bool Celda::get_evaluado(void) {
-  return evaluado_;
+bool Celda::get_cerrada(void) {
+  return cerrada_;
 }
 
-bool Celda::get_frontera(void) {
-  return frontera_;
+bool Celda::get_abierta(void) {
+  return abierta_;
 }
 
 void Celda::set_estado(int estado) {
@@ -68,12 +72,12 @@ void Celda::set_padre(Celda* padre) {
   padre_ = padre;
 }
 
-void Celda::set_evaluado(bool evaluado) {
-  evaluado_ = evaluado;
+void Celda::set_cerrada(bool cerrada) {
+  cerrada_ = cerrada;
 }
 
-void Celda::set_frontera(bool frontera) {
-  frontera_ = frontera;
+void Celda::set_abierta(bool abierta) {
+  abierta_ = abierta;
 }
 
 void Celda::cargar_textura(int estado) {
@@ -82,7 +86,7 @@ void Celda::cargar_textura(int estado) {
       texture.loadFromFile("images/celda_libre.png", sf::IntRect(0,0,45,45));
       break;
     case 1:
-      texture.loadFromFile("images/salida.png", sf::IntRect(0,0,45,45));
+      texture.loadFromFile("images/inicio.png", sf::IntRect(0,0,45,45));
       break;
     case 2:
       texture.loadFromFile("images/final.png", sf::IntRect(0,0,45,45));

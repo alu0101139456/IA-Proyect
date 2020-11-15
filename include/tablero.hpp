@@ -1,3 +1,11 @@
+/**
+  * @author Alberto Mendoza Rodríguez, Ángel Julián Bolaño Campos, Iris Estefanía Pereira Domínguez
+  * @file tablero.hpp
+  * @brief Clase Tablero que representa el entorno en el que se puede mover el coche autónomo.
+  * @details Inteligencia Artificial. Práctica 1 Estrategias de Búsqueda.
+  */
+
+
 #ifndef TABLERO
 #define TABLERO
 

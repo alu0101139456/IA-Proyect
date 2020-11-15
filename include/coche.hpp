@@ -1,3 +1,10 @@
+/**
+  * @author Alberto Mendoza Rodríguez, Ángel Julián Bolaño Campos, Iris Estefanía Pereira Domínguez
+  * @file coche.hpp
+  * @brief Clase Coche que contiene los sensores del coche autónomo, el algoritmo A* y las funciones heurísticas.
+  * @details Inteligencia Artificial. Práctica 1 Estrategias de Búsqueda.
+  */
+
 #ifndef COCHE
 #define COCHE
 
@@ -16,7 +23,7 @@ class Coche {
   * @brief El coche conoce el lugar desde el que sale
   * 
   */
-  Celda* inicial_; 
+  Celda* inicial_;
   /**
    * @brief El coche conoce donde tiene que ir
    * 
@@ -31,13 +38,11 @@ class Coche {
   clock_t time_;
   int longitud_camino_;
   int nodos_expandidos_;
-
  public:
-
- /**
- * @brief Constructor por defecto
- * 
- */
+  /**
+  * @brief Constructor por defecto
+  * 
+  */
   Coche(void);
   /**
    * @brief Destructor por defecto
@@ -80,12 +85,11 @@ class Coche {
    * @brief Heuristicas que sigue el coche
    * 
    * @param celda Recibe la celda dede la que calcular el coste
-   * @param tablero 
    * @return float 
    */
-  float heuristicas(Celda* celda, Tablero& tablero);
+  float heuristicas(Celda* celda);
   /**
-   * @brief Algoritmo A* Recoge los vecinos de una celda a analizar y busca caminos con  mejor coste
+   * @brief Algoritmo A* que busca el camino óptimo entre la posición inicial y final
    * 
    * @param tablero Tablero pasado por referencia
    * @param heuristica Entero indicando la heurística a utilizar
@@ -94,15 +98,14 @@ class Coche {
    */
   bool a_estrella(Tablero& tablero, int heuristica);
   /**
-   * @brief Getionar Vecino se encarga de calcular las heurísticas desde el punto analizado hasta la meta y los mete en un vector
+   * @brief Getionar Vecino se encarga de calcular las heurísticas desde el punto analizado hasta la meta y gestionar las listas abiertas y cerradas
    * 
    * @param open Conjunto de los posibles nodos a visitar 
-   * @param celda_vecina Celda desde la que queremos verificar distantias
-   * @param tablero Tablero pasado por referencia
+   * @param celda_vecina Celda desde la que queremos verificar distancias
    */
-  void gestionar_vecino(std::vector<Celda*>& open, Celda* celda_vecina, Tablero& tablero);
+  void gestionar_vecino(std::vector<Celda*>& open, Celda* celda_vecina);
   /**
-   * @brief Recostruye el camino que se fue guardando en cada uno de los padres de las celdas elegidas optimas
+   * @brief Recostruye el camino que se fue guardando en cada uno de los padres de las celdas elegidas como óptimas
    * 
    * @param celda 
    */
@@ -114,17 +117,18 @@ class Coche {
    */
   int nodos_expandidos(void);
   /**
-   * @brief Getter de longitud camino
+   * @brief Getter de la longitud camino mínimo
    * 
    * @return int 
    */
   int longitud_camino(void);
   /**
-   * @brief Función para controlar el tiempo. 
+   * @brief Getter del tiempo que tarda en ejecutarse el A* 
    * 
    * @return clock_t 
    */
   clock_t tiempo(void);
+  
 
 };
 

@@ -1,3 +1,10 @@
+/**
+  * @author Alberto Mendoza Rodríguez, Ángel Julián Bolaño Campos, Iris Estefanía Pereira Domínguez
+  * @file celda.hpp
+  * @brief Clase Celda que representa cada una de las posiciones del tablero, estas pueden ser la posición inicial o final, estar libre o constituir un obstáculo.
+  * @details Inteligencia Artificial. Práctica 1 Estrategias de Búsqueda.
+  */
+
 #ifndef CELDA
 #define CELDA
 
@@ -7,7 +14,6 @@
 
 enum Estado{ LIBRE, INICIO, FINAL, OBSTACULO, CAMINO};
 
-
 class Celda : public sf::Sprite {
  private:  
   int i_;
@@ -16,10 +22,10 @@ class Celda : public sf::Sprite {
   float costeF_;
   float costeG_;
   Celda* padre_;
-  bool evaluado_;
-  bool frontera_;
+  bool cerrada_;
+  bool abierta_;
   sf::Texture texture;
-
+  
  public:
  /**
   * @brief Costructor por defecto
@@ -27,7 +33,7 @@ class Celda : public sf::Sprite {
   */
   Celda(void);
   /**
-   * @brief Construct a new Celda object
+   * @brief Constructor parametrizado
    * 
    * @param i Coordenada i
    * @param j Coordenada j
@@ -35,7 +41,7 @@ class Celda : public sf::Sprite {
    */
   Celda(int i, int j, int estado);
   /**
-   * @brief Destructor de celda
+   * @brief Destructor de Celda
    * 
    */
   ~Celda(void);
@@ -76,57 +82,57 @@ class Celda : public sf::Sprite {
    */
   int get_j(void) const;
   /**
-   * @brief Utilizado en el algoritmo A* para comprobar los estados evaluados por el algoritmo
+   * @brief Utilizado en el algoritmo A* para comprobar si la celda está en la lista cerrada
    * 
    * @return true 
    * @return false 
    */
-  bool get_evaluado(void);
+  bool get_cerrada(void);
   /**
-   * @brief Devuelve si el objeto es frontera
+   * @brief Utilizado en el algoritmo A* para comprobar si la celda está en la lista abierta
    * 
    * @return true 
    * @return false 
    */
-  bool get_frontera(void);
-  /**
+  bool get_abierta(void);
+   /**
    * @brief Set del estado
    * 
    * @param estado 
    */
   void set_estado(int estado);
   /**
-   * @brief Set el costeF de la celda
+   * @brief Set del coste f de la celda
    * 
-   * @param coste Recibe una variable int
+   * @param coste Recibe una variable float
    */
   void set_costeF(float coste);
   /**
-   * @brief Set el coste F de la celda
+   * @brief Set del coste g de la celda
    * 
-   * @param coste Recibe una variable Float
+   * @param coste Recibe una variable float
    */
   void set_costeG(float coste);
   /**
-   * @brief Set el padre de una celda 
+   * @brief Set del padre de una celda 
    * 
    * @param padre Padre de la celda con puntero
    */
   void set_padre(Celda* padre);
   /**
-   * @brief Setter de un objeto evaluado
+   * @brief Utilizado en el algoritmo A* para introducir a la celda en la lista cerrada 
    * 
-   * @param evaluado 
+   * @param cerrada 
    */
-  void set_evaluado(bool evaluado);
+  void set_cerrada(bool cerrada);
   /**
-   * @brief Ayuda a delimitar el limite de donde se hacen los caminos
+   * @brief Utilizado en el algoritmo A* para introducir a la celda en la lista abierta 
    * 
-   * @param frontera 
+   * @param abierta 
    */
-  void set_frontera(bool frontera);
+  void set_abierta(bool abierta);
   /**
-   * @brief Carga textura utiliza las texturas en la carpeta images/
+   * @brief Carga las texturas utilizando las imagenes de la carpeta images/
    * 
    * @param estado 
    */
@@ -139,7 +145,6 @@ class Celda : public sf::Sprite {
    * @return false 
    */
   bool operator==(const Celda& celda1) const;
-
 
 };
 
