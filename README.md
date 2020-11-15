@@ -4,12 +4,6 @@
 ### Curso: 2020 - 2021
 ---
 
-## Dependencias
-~~~
-sudo apt-get install libsfml-dev
-~~~
-
-
 ## Dependencias:
  ~~~
  ~$ sudo apt-get install libsfml-dev
